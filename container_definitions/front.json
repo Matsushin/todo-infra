@@ -1,0 +1,53 @@
+{
+    "name": "${container_name}",
+    "image": "${aws_account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/${project_name}-front:${env}",
+    "essential": true,
+    "command": ["yarn", "start"],
+    "secrets": [
+      {
+        "name": "NUXT_HOST",
+        "valueFrom": "/${env}/nuxt/host"
+      },
+      {
+        "name": "NUXT_PORT",
+        "valueFrom": "/${env}/nuxt/port"
+      },
+      {
+        "name": "NUXT_ENV_API_BASE_URL",
+        "valueFrom": "/${env}/nuxt/api_base_url"
+      },
+      {
+        "name": "NUXT_ENV_BASIC_NAME",
+        "valueFrom": "/${env}/nuxt/basic_auth_name"
+      },
+      {
+        "name": "NUXT_ENV_BASIC_PASS",
+        "valueFrom": "/${env}/nuxt/basic_auth_password"
+      },
+      {
+        "name": "NUXT_ENV_ENABLE_BASIC_AUTH",
+        "valueFrom": "/${env}/nuxt/basic_auth_enabled"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "svc",
+        "awslogs-group": "/ecs/${project_name}-${env}-ecs"
+      }
+    },
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ],
+    "healthCheck": {
+      "command": ["CMD-SHELL", "curl --basic -u matsushin:as409gAK -f http://localhost:80/ || exit 1"],
+      "startPeriod": 20,
+      "interval": 30,
+      "retries": 3,
+      "timeout": 5
+    }
+  }

@@ -1,0 +1,97 @@
+{
+  "name": "${container_name}",
+  "image": "${aws_account_id}.dkr.ecr.ap-northeast-1.amazonaws.com/${project_name}-backend:${env}",
+  "essential": true,
+  "secrets": [
+    {
+      "name": "API_SERVER_DATABASE_HOST",
+      "valueFrom": "/${env}/db/host"
+    },
+    {
+      "name": "API_SERVER_DATABASE_NAME",
+      "valueFrom": "/${env}/db/name"
+    },
+    {
+      "name": "API_SERVER_DATABASE_USER",
+      "valueFrom": "/${env}/db/username"
+    },
+    {
+      "name": "API_SERVER_DATABASE_PASSWORD",
+      "valueFrom": "/${env}/db/password"
+    },
+    {
+      "name": "SECRET_KEY_BASE",
+      "valueFrom": "/${env}/rails/secret_key"
+    },
+    {
+      "name": "S3_RESOURCE_BUCKET",
+      "valueFrom": "/${env}/s3/resource_bucket"
+    },
+    {
+      "name": "ADMIN_BASIC_AUTH_NAME",
+      "valueFrom": "/${env}/rails/basic_auth_name"
+    },
+    {
+      "name": "ADMIN_BASIC_AUTH_PASSWORD",
+      "valueFrom": "/${env}/rails/basic_auth_password"
+    },
+    {
+      "name": "MAILER_SENDER",
+      "valueFrom": "/${env}/rails/mailer_sender"
+    },
+    {
+      "name": "SENDGRID_API_KEY",
+      "valueFrom": "/${env}/rails/sendgrid_api_key"
+    },
+    {
+      "name": "FRONT_BASE_URL",
+      "valueFrom": "/${env}/rails/front_base_url"
+    },
+    {
+      "name": "RAILS_PUBLIC_BASE_URL",
+      "valueFrom": "/${env}/rails/public_base_url"
+    },
+    {
+      "name": "EMAILS_FOR_FAILED_FAX",
+      "valueFrom": "/${env}/rails/emails_for_failed_fax"
+    }
+  ],
+  "environment": [
+    {
+      "name": "RAILS_ENV",
+      "value": "production"
+    },
+    {
+      "name": "RAILS_LOG_TO_STDOUT",
+      "value": "true"
+    },
+    {
+      "name": "RAILS_SERVE_STATIC_FILES",
+      "value": "true"
+    }
+  ],
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options": {
+      "awslogs-region": "ap-northeast-1",
+      "awslogs-stream-prefix": "svc",
+      "awslogs-group": "/ecs/${project_name}-${env}-ecs"
+    }
+  },
+  "portMappings": [
+    {
+      "protocol": "tcp",
+      "containerPort": 3000
+    }
+  ],
+  "healthCheck": {
+      "command": [
+          "CMD-SHELL",
+          "wget -q -O - http://127.0.0.1:3000/health_check || exit 1"
+      ],
+      "startPeriod": 30,
+      "interval": 30,
+      "retries": 3,
+      "timeout": 5
+  }
+}
