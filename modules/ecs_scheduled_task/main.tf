@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "default" {
 
 resource "aws_cloudwatch_event_rule" "batch_sample" {
   name                = "batch-sample"
-  schedule_expression = "cron(*/10 * * * ? *)"
+  schedule_expression = "cron(*/5 * * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "batch_sample" {
