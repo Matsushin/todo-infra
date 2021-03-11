@@ -50,10 +50,6 @@
     {
       "name": "RAILS_PUBLIC_BASE_URL",
       "valueFrom": "/${env}/rails/public_base_url"
-    },
-    {
-      "name": "EMAILS_FOR_FAILED_FAX",
-      "valueFrom": "/${env}/rails/emails_for_failed_fax"
     }
   ],
   "environment": [

@@ -165,12 +165,6 @@ resource "aws_ssm_parameter" "dockerhub_password" {
   }
 }
 
-resource "aws_ssm_parameter" "emails_for_failed_fax" {
-  name  = "/${var.env}/rails/emails_for_failed_fax"
-  value = "matsushin.dev@gmail.com,matsushin.dev+test@gmail.com"
-  type  = "StringList"
-}
-
 # resource "aws_ssm_parameter" "smtp_address" {
 #   name  = "/${var.env}/rails/smtp_address"
 #   value = "email-smtp.ap-northeast-1.amazonaws.com"
